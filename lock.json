@@ -1,0 +1,13 @@
+{
+    "memo": "0b7bf82a70f341e8998160198bbf0431de9b29fe9fc30037481526e9ab0446b5",
+    "projects": [
+        {
+            "name": "github.com/dgrijalva/jwt-go",
+            "branch": "master",
+            "revision": "a539ee1a749a2b895533f979515ac7e6e0f5b650",
+            "packages": [
+                "."
+            ]
+        }
+    ]
+}

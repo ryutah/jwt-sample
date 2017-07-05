@@ -1,0 +1,7 @@
+{
+    "dependencies": {
+        "github.com/dgrijalva/jwt-go": {
+            "branch": "master"
+        }
+    }
+}
