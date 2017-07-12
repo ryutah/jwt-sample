@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -20,7 +21,48 @@ type User struct {
 }
 
 func main() {
-	sampleJWT()
+	// 	createNewPemKey()
+	// 	sampleJWT()
+	testAccessToken("http://localhost:8080/api/access_token", "5733953138851840", "55b432673107efee9de110f49ab74234bbdc57592ae0cf4cccdcf61f68f29ab7")
+}
+
+func createNewPemKey() {
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		panic(err)
+	}
+
+	savePEMKey := func(k *rsa.PrivateKey) {
+		privateKey := &pem.Block{
+			Type:  "PRIVATE KEY",
+			Bytes: x509.MarshalPKCS1PrivateKey(key),
+		}
+		bt := pem.EncodeToMemory(privateKey)
+		log.Println(string(bt))
+	}
+
+	savePEMKey(key)
+}
+
+func DecodeHeader(jwtToken string) (string, error) {
+	parts := strings.Split(jwtToken, ".")
+	return DecodeURLSafeBase64(parts[0])
+}
+
+func DecodeClaims(jwtToken string) (string, error) {
+	parts := strings.Split(jwtToken, ".")
+	return DecodeURLSafeBase64(parts[1])
+}
+
+func DecodeURLSafeBase64(str string) (string, error) {
+	if l := len(str) % 4; l > 0 {
+		str += strings.Repeat("=", 4-l)
+	}
+	decodeStr, err := base64.URLEncoding.DecodeString(str)
+	if err != nil {
+		return "", err
+	}
+	return string(decodeStr), nil
 }
 
 func sampleJWT() {
